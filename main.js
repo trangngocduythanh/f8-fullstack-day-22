@@ -93,7 +93,7 @@ function addTask(e) {
         return;
     }
 
-    tasks.push({
+    tasks.unshift({
         title: value,
         completed: false,
     });
