@@ -4,11 +4,11 @@ const taskList = document.querySelector("#task-list");
 const todoForm = document.querySelector("#todo-form");
 const todoInput = document.querySelector("#todo-input");
 
-function escapeHTML(html) {
-    const div = document.createElement("div");
-    div.innerText = html;
-    return div.innerHTML;
-}
+// function escapeHTML(html) {
+//     const div = document.createElement("div");
+//     div.innerText = html;
+//     return div.innerHTML;
+// }
 
 function isDuplicateTask(newTitle, excludeIndex = -1) {
     const isDuplicate = tasks.some(
@@ -108,24 +108,57 @@ function renderTask() {
         return;
     }
 
-    const html = tasks
-        .map(
-            (task, index) => `<li class="task-item ${
-                task.completed ? "completed" : ""
-            }" data-index="${index}">
-                    <span class="task-title">${escapeHTML(task.title)}</span>
-                    <div class="task-action">
-                        <button class="task-btn edit">Edit</button>
-                        <button class="task-btn done">${
-                            task.completed ? "Mark as undone" : "Mark as done"
-                        }</button>
-                        <button class="task-btn delete">Delete</button>
-                    </div>
-                </li>`
-        )
-        .join("");
+    taskList.innerHTML = "";
 
-    taskList.innerHTML = html;
+    tasks.forEach((task, index) => {
+        const li = document.createElement("li");
+        li.className = `task-item ${task.completed ? "completed" : ""}`;
+        li.dataset.index = index;
+
+        const span = document.createElement("span");
+        span.className = "task-title";
+        span.textContent = task.title;
+
+        const div = document.createElement("div");
+        div.className = "task-action";
+
+        const btnEdit = document.createElement("button");
+        btnEdit.className = "task-btn edit";
+        btnEdit.textContent = "Edit";
+
+        const btnDone = document.createElement("button");
+        btnDone.className = "task-btn done";
+        btnDone.textContent = task.completed
+            ? "Mark as undone"
+            : "Mark as done";
+
+        const btnDelete = document.createElement("button");
+        btnDelete.className = "task-btn delete";
+        btnDelete.textContent = "Delete";
+
+        div.append(btnEdit, btnDone, btnDelete);
+        li.append(span, div);
+        taskList.appendChild(li);
+    });
+
+    // const html = tasks
+    //     .map(
+    //         (task, index) => `<li class="task-item ${
+    //             task.completed ? "completed" : ""
+    //         }" data-index="${index}">
+    //                 <span class="task-title">${escapeHTML(task.title)}</span>
+    //                 <div class="task-action">
+    //                     <button class="task-btn edit">Edit</button>
+    //                     <button class="task-btn done">${
+    //                         task.completed ? "Mark as undone" : "Mark as done"
+    //                     }</button>
+    //                     <button class="task-btn delete">Delete</button>
+    //                 </div>
+    //             </li>`
+    //     )
+    //     .join("");
+
+    // taskList.innerHTML = html;
 }
 
 todoForm.addEventListener("submit", addTask);
